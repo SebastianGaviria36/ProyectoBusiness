@@ -75,10 +75,41 @@ unique(datosModelo$DEPARTAMENTO_PROPIETARIO) #Revisar NA´s
 #Renting variable
 unique(datosModelo$RENTING) #Imputar NA´s
 
+#--------------------------------IMPUTATION PROCEDURE--------------------------------------
+#PLACA
+datosModelo$PLACA[660] <- "JKW267"
+
+#kILOMETRAJE
+modkilometraje <- lm(KILOMETRAJE ~ DIAS, data = datosModelo)
+
+datosModelo$KILOMETRAJE[is.na(datosModelo$KILOMETRAJE)] <- predict(modkilometraje, 
+        data.frame(DIAS = datosModelo$DIAS[is.na(datosModelo$KILOMETRAJE)]))
+
+#DIAS
+moddias <- lm(DIAS ~ KILOMETRAJE, data = datosModelo)
+
+datosModelo$DIAS[is.na(datosModelo$DIAS)] <- predict(moddias,
+        data.frame(KILOMETRAJE = datosModelo$KILOMETRAJE[is.na(datosModelo$DIAS)]))
 
 
+#TALLER
+datosModelo$TALLER[datosModelo$TALLER == "Surtiretenes BGTA"] <- "SURTIRETENES Y RODAMIENTOS"
+datosModelo$TALLER[datosModelo$TALLER == "SURTIRETENES Y RODAMIENTOS LTD"] <- "SURTIRETENES Y RODAMIENTOS"
+datosModelo$TALLER[datosModelo$TALLER == "Surtiretenes CALI"] <- "SURTIRETENES Y RODAMIENTOS"
+datosModelo$TALLER[datosModelo$TALLER == "SURTIRETENES Y RODAMIENTOS LTDA CAL"] <- "SURTIRETENES Y RODAMIENTOS"
+
+datosModelo$TALLER[datosModelo$TALLER == "ETM"] <- "EQUIPOS TECNI METALICOS"
+datosModelo$TALLER[datosModelo$TALLER == "EQUIPOS TECNI METALICOS SAS"] <- "EQUIPOS TECNI METALICOS"
+
+datosModelo$TALLER[datosModelo$TALLER == "Imalbestos"] <- "IMALBESTOS"
+datosModelo$TALLER[datosModelo$TALLER == "DISTRIBUIDORA IMALBESTOS SAS"] <- "IMALBESTOS"
+
+datosModelo$TALLER[datosModelo$TALLER == "TPO REPUESTOS SAS"] <- "TPO REPUESTOS"
+datosModelo$TALLER[datosModelo$TALLER == "TPO CALI"] <- "TPO REPUESTOS"
 
 
+#DESCRIPCION_PARTE
+unique(datosModelo$DESCRIPCION_PARTE)
 
 
 

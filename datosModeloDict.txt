@@ -6,21 +6,21 @@ PLACA: Placa del vehículo
 KILOMETRAJE: Registro del odómetro al ingreso
 FECHA_INGRESO: Fecha de ingreso a taller
 FECHA_ALISTAMIENTO: Fecha de preparación
-FECHA_AOM: ???
+FECHA_AOM: Fecha de alistamiento o matrícula
 TALLER: Lugar de ingreso
-CODIGO_REFERENCIA_MOBILITY: ???
+CODIGO_REFERENCIA_MOBILITY: Referencia de la pieza
 DESCRIPCION_PARTE: Componente implicado
 CANTIDAD_REF: Cantidad de componentes
-VERSION: ???
+VERSION: Versión del vehículo
 TIPO_DE_SERVICIO: Si corresponde a falla o mantenimiento
 EMPRESA: Empresa a la que pertenece el vehículo
 TIPO: Si correspone a una garantía o no
 DESCRIPCION: Tipo de mantenimiento
 DESCRIPCION_INGRESO: Motivo de ingreso del vehículo
 ESTADO: Procedimiento o estado final del ingreso
-CANTIDAD: ???
+CANTIDAD: Cantidad de piezas requeridas
 NEED_REPUESTO: Si el vehiculo requirió repuesto
-REPUESTO_SAP: ???
+REPUESTO_SAP: Procedencia SAP del repuesto
 REPUESTO_NACIONAL: Procedencia nacional del repuesto
 REPUESTO_REUTILIZADO: Repuesto reutilizado
 TIPO_REPUESTO: Procedencia del repuesto ? (dos variables anteriores)
