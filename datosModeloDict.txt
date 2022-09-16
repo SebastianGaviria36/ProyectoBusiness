@@ -18,16 +18,11 @@ TIPO: Si correspone a una garantía o no
 DESCRIPCION: Tipo de mantenimiento
 DESCRIPCION_INGRESO: Motivo de ingreso del vehículo
 ESTADO: Procedimiento o estado final del ingreso
-CANTIDAD: Cantidad de piezas requeridas
-NEED_REPUESTO: Si el vehiculo requirió repuesto
-REPUESTO_SAP: Procedencia SAP del repuesto
-REPUESTO_NACIONAL: Procedencia nacional del repuesto
-REPUESTO_REUTILIZADO: Repuesto reutilizado
-TIPO_REPUESTO: Procedencia del repuesto ? (dos variables anteriores)
+TIPO_REPUESTO: Procedencia del repuesto
 NOTA: Anotaciones del taller sobre el fallo
 DEPARTAMENTO: Departamento de circulación del vehículo
 CIUDAD: Ciudad de circulación del vehículo
-LINEA: Línea del vehículo (relacionado al modelo?)
+LINEA: Línea del vehículo (relacionado al modelo)
 MODELO_AÑO: Modelo del vehículo (año)
 CIUDAD_PROPIETARIO: Ciudad de procedencia del propietario
 DEPARTAMENTO_PROPIETARIO: Departamento de procedencia del propietario
