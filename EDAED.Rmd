@@ -1,0 +1,165 @@
+---
+title: "EDAED"
+author: "Sebastian Gaviria"
+date: '2022-09-21'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, results = F, message = F)
+library(tidyverse)
+```
+
+```{r}
+library(readxl)
+data <- read_excel("datosModelo2.xlsx", col_types = c("text", 
+    "text", "text", "numeric", "text", "numeric", 
+    "date", "date", "date", "text", "text", 
+    "text", "numeric", "text", "text", "text", 
+    "text", "text", "text", "text", "text", 
+    "text", "text", "text", "text", "numeric", 
+    "text", "text", "text", "numeric"))
+
+```
+
+```{r}
+data <- data %>%
+  mutate(TALLER = as.factor(TALLER),
+         DESCRIPCION_PARTE = as.factor(DESCRIPCION_PARTE),
+         CANTIDAD_REF = as.factor(CANTIDAD_REF),
+         VERSION = as.factor(VERSION),
+         TIPO_DE_SERVICIO = as.factor(TIPO_DE_SERVICIO),
+         EMPRESA = as.factor(EMPRESA),
+         TIPO = as.factor(TIPO),
+         DESCRIPCION_SERVICIO = as.factor(DESCRIPCION_SERVICIO),
+         DESCRIPCION_INGRESO = as.factor(DESCRIPCION_INGRESO),
+         ESTADO = as.factor(ESTADO),
+         TIPO_REPUESTO = as.factor(TIPO_REPUESTO),
+         DEPARTAMENTO = as.factor(DEPARTAMENTO),
+         CIUDAD = as.factor(CIUDAD),
+         MODELO_AÑO = as.factor(MODELO_AÑO),
+         CIUDAD_PROPIETARIO = as.factor(CIUDAD_PROPIETARIO),
+         DEPARTAMENTO_PROPIETARIO = as.factor(DEPARTAMENTO_PROPIETARIO),
+         RENTING = as.factor(RENTING))
+```
+
+```{r}
+empresas <- names(sort(table(data$EMPRESA),T)[1:6])
+data %>% 
+  filter(EMPRESA %in% empresas,
+         DESCRIPCION_PARTE == "BATERIAS 12V" |
+         DESCRIPCION_PARTE == "VCU SOFTWARE C (230)" |
+         DESCRIPCION_PARTE == "SENSOR DE PRESION" |
+         DESCRIPCION_PARTE == "CARGADOR PORTABLE 15KW" |
+         DESCRIPCION_PARTE == "BUJE AMORTIGUADOR CON CAUCHO" |
+         DESCRIPCION_PARTE == "TERMINAL INTELIGENTE DE VEHICULO" |
+         DESCRIPCION_PARTE == "ORING" |
+         DESCRIPCION_PARTE == "FLASHER" |
+         DESCRIPCION_PARTE == "RELOJ RESORTE DE TIMON" |
+         DESCRIPCION_PARTE == "AMORTIGUADOR (DELANTERO)" |
+         DESCRIPCION_PARTE == "SISTEMA DE REFRIGERACIÓN MOTOR" |
+         DESCRIPCION_PARTE == "CONECTOR SENSOR DE PRESION" | 
+         DESCRIPCION_PARTE == "COMPRESOR AIRE DE FRENOS (230VH)") %>%
+  ggplot(., aes(x = DESCRIPCION_PARTE, 
+                fill = DESCRIPCION_PARTE)) +
+  geom_bar() +
+  facet_wrap(~EMPRESA) +
+  labs(title = "Fallas más comunes por empresa", y = "Cantidad",
+       x = "", fill = "Parte") +
+  theme(axis.text.x = element_blank())
+```
+
+```{r}
+data %>% 
+  filter(DESCRIPCION_PARTE == "BATERIAS 12V" |
+         DESCRIPCION_PARTE == "VCU SOFTWARE C (230)" |
+         DESCRIPCION_PARTE == "SENSOR DE PRESION" |
+         DESCRIPCION_PARTE == "CARGADOR PORTABLE 15KW" |
+         DESCRIPCION_PARTE == "BUJE AMORTIGUADOR CON CAUCHO" |
+         DESCRIPCION_PARTE == "TERMINAL INTELIGENTE DE VEHICULO" |
+         DESCRIPCION_PARTE == "ORING" |
+         DESCRIPCION_PARTE == "FLASHER" |
+         DESCRIPCION_PARTE == "RELOJ RESORTE DE TIMON" |
+         DESCRIPCION_PARTE == "AMORTIGUADOR (DELANTERO)" |
+         DESCRIPCION_PARTE == "SISTEMA DE REFRIGERACIÓN MOTOR" |
+         DESCRIPCION_PARTE == "CONECTOR SENSOR DE PRESION" | 
+         DESCRIPCION_PARTE == "COMPRESOR AIRE DE FRENOS (230VH)") %>%
+  ggplot(., aes(x = DESCRIPCION_PARTE, 
+                fill = DESCRIPCION_PARTE)) +
+  geom_bar() +
+  facet_wrap(~DEPARTAMENTO) +
+  labs(title = "Fallas más comunes por departamento", y = "Cantidad",
+       x = "", fill = "Parte") +
+  theme(axis.text.x = element_blank())
+```
+
+```{r}
+library(lubridate)
+data %>%
+  mutate(MES = month(FECHA_INGRESO, T),
+         ANIO = year(FECHA_INGRESO)) %>%
+  ggplot(.,aes(x = MES)) + 
+  geom_bar() +
+  labs(title = "Cantidad de fallas por mes", y = "Cantidad", x = "Mes") +
+  facet_wrap(~ANIO)
+
+```
+
+```{r}
+data %>%
+  #select(KILOMETRAJE, DESCRIPCION_PARTE, DEPARTAMENTO) %>%
+  filter(DESCRIPCION_PARTE == "BATERIAS 12V" |
+         DESCRIPCION_PARTE == "VCU SOFTWARE C (230)" |
+         DESCRIPCION_PARTE == "SENSOR DE PRESION" |
+         DESCRIPCION_PARTE == "CARGADOR PORTABLE 15KW" |
+         DESCRIPCION_PARTE == "BUJE AMORTIGUADOR CON CAUCHO" |
+         DESCRIPCION_PARTE == "TERMINAL INTELIGENTE DE VEHICULO") %>%
+  ggplot(., aes(x = DESCRIPCION_PARTE, y = KILOMETRAJE, 
+                fill = DESCRIPCION_PARTE)) +
+  geom_boxplot() +
+  stat_summary(fun=mean, geom="point", shape=13, size=2, color="blue") +
+  facet_wrap(~DEPARTAMENTO) +
+  labs(title = "Kilometraje a los fallos mas comunes\npor departamento",
+       x = "", y = "Kilometraje", fill = "Parte") +
+  theme(axis.text.x = element_blank())
+```
+
+```{r}
+data %>% 
+ # select_(KILOMETRAJE, DESCRIPCION_PARTE, EMPRESA) %>%
+  filter(EMPRESA %in% empresas,
+         DESCRIPCION_PARTE == "BATERIAS 12V" |
+         DESCRIPCION_PARTE == "VCU SOFTWARE C (230)" |
+         DESCRIPCION_PARTE == "SENSOR DE PRESION" |
+         DESCRIPCION_PARTE == "CARGADOR PORTABLE 15KW" |
+         DESCRIPCION_PARTE == "BUJE AMORTIGUADOR CON CAUCHO" |
+         DESCRIPCION_PARTE == "TERMINAL INTELIGENTE DE VEHICULO") %>%
+  ggplot(., aes(x = DESCRIPCION_PARTE, y = KILOMETRAJE, 
+                fill = DESCRIPCION_PARTE)) +
+  geom_boxplot() +
+  stat_summary(fun=mean, geom="point", shape=13, size=2, color="blue") +
+  facet_wrap(~EMPRESA) +
+  labs(title = "Kilometraje a los fallos mas comunes\npor empresa",
+       x = "", y = "Kilometraje", fill = "Parte") +
+  theme(axis.text.x = element_blank())
+```
+
+```{r}
+library(survival)
+library(gamlss)
+distkm <- fitDist(data$KILOMETRAJE, type = "realplus")
+distkm$mu.coefficients
+#gamma(10000, 1, scale = 15156.8)
+```
+
+```{r}
+densityframe <- data.frame(Kilometraje = c(data$KILOMETRAJE,rEXP(10000,15156.8)),
+                           Tipo = c(rep("Real",length(data$KILOMETRAJE)),
+                                     rep("Ajustado",10000)))
+
+ggplot(densityframe, aes(x=Kilometraje, color=Tipo)) +
+  geom_density(lwd=1) +
+  xlim(-3000,100000) + 
+  labs(y="Densidad", title = "Modelo distribucional para el Kilometraje")
+```
+
