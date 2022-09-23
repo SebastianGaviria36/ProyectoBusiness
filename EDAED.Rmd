@@ -5,6 +5,9 @@ date: '2022-09-19'
 output: html_document
 ---
 
+### Introducción
+El presente documento desarrolla un detallado análisis descriptivo y exploratorio de algunas de las variables más prometedoras presentes en los datos proporcionados sobre los camiones STARK E-CARGO 4.0T. Abajo encontrará una serie de gráficos descriptivos interactivos donde podrá ver los detalles que sean de su interés (puede mover el cursor sobre los mismos, realizar zoom con el mouse y ocultar categorías a su gusto). Si desea información técnica sobre la construcción de este documento, código escrito y recursos utilizados, por favor visite el siguiente repositorio de GitHub: [Proyecto De Analítica Auteco Business](https://github.com/PracticanteAutecoBusiness/ProyectoBusiness)
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = F, warning = F, results = T, message = F)
 library(tidyverse)
@@ -44,6 +47,7 @@ data <- data %>%
          RENTING = as.factor(RENTING))
 ```
 
+### Análisis cantidad de repuestos solicitados por empresa y departamento
 Es de interés conocer cómo se comportan las empresas que más registros de fallas poseen en los fallos más comunes de los camiones STARK E-CARGO 4T y que requieren un recambio del componente. Para dicha causa se seleccionan las seis empresas con más vehículos ingresados a taller y adicionalmente se eligen los 13 fallos más comunes en dichas empresas. La información se ilustra así: 
 
 ```{r out.height=500, out.width=900}
@@ -76,7 +80,7 @@ ggplotly(p1)
 
 - Las seis empresas que más ingresos registran son en orden descendente BIMBO con 342 ingresos a taller, seguida por ARGOS con 283 ingresos, NUTRESA con 166, ÉXITO con 142 camiones ingresados a taller, BAVARIA con 142 y por último OPERLOG con 111 registros.
 
-- Sin embargo, como se puede apreciar en este gráfico, la empresa que tiene los vehículos que más fallan y requieren repuestos es ARGOS. Específicamente se puede notar que los bujes de la suspensión son los más afectados en estos vehículo y podría pensarse que esta situación se da gracias a las condiciones de trabajo en esta empresa (cargas más pesadas o rutas más exigentes).
+- Sin embargo, como se puede apreciar en este gráfico, la empresa que tiene los vehículos que más fallan y requieren repuestos es ARGOS. Específicamente se puede notar que los bujes de la suspensión son los más afectados en estos vehículos y podría pensarse que esta situación se da gracias a las condiciones de trabajo en esta empresa (cargas más pesadas o rutas más exigentes).
 
 - La situación cambia cuando nos referimos a BIMBO, segunda empresa que solicita más repuestos. Allí las fallas de los camiones se encuentran más relacionadas con componentes electrónicos del mismo. La terminal inteligente, sensores de presión y el reloj resorte de timón son las fallas más comunes.
 
@@ -121,8 +125,9 @@ ggplotly(p2)
 
 - De manera similar, en ANTIOQUIA se registran menos fallos relacionados al sistema de refrigeración del motor. Una posible causa potencial para esta situación es que gracias a los atascos de la ciudad de BOGOTÁ, el radiador que enfría el líquido refrigerante del sistema recibe menos viento. Esto en contraste con MEDELLÍN, donde es un poco menos usual y en menor intensidad los trancones. 
 
-- Gracias al tamaño del parque automor en los departamentos de RISARALDA y VALLE DEL CAUCA, se tienen menos registros de fallos relacionados a estos conceptos más frecuentes. Particularmente en RISARALDA se tienen dos averías donde se cambió la VCU. En el VALLE DEL CAUCA la falla más usual donde se requiere recambio es por los bujes de suspensión.
+- Gracias al tamaño del parque automotor en los departamentos de RISARALDA y VALLE DEL CAUCA, se tienen menos registros de fallos relacionados a estos conceptos más frecuentes. Particularmente en RISARALDA se tienen dos averías donde se cambió la VCU. En el VALLE DEL CAUCA la falla más usual donde se requiere recambio es por los bujes de suspensión.
 
+### Análisis temporal cantidad de repuestos solicitados 
 
 Por otro lado, es de interés también observar el comportamiento de solicitud de repuestos a lo largo de los meses y los años. Esto para visualizar posibles tendencias en el comportamiento de este fenómeno. Se plantea así el siguiente gráfico:
 
@@ -141,6 +146,7 @@ ggplotly(p3)
 
 En este gráfico se aprecia inicialmente un periodo de 4 años desde el 2019 hasta la fecha actual. En el año 2019 se tiene una cantidad mínima de repuestos cambiados. Sin embargo desde el 2020 y hasta el día de hoy, la solicitud de recambios en los camiones STARK no ha parado de crecer. Esto último responde naturalmente al crecimiento del parque automotor de este modelo a lo largo del periodo de tiempo en cuestión.
 
+### Kilometraje vs. fallas más comunes por empresa y departamento
 Ahora, analizando lo discutido anteriormente respecto a los departamentos de cara al kilometraje, se propone la siguiente figura:
 
 ```{r out.height=500, out.width=900}
@@ -168,7 +174,7 @@ ggplotly(p4)
 
 - Como se mencionó anteriormente, ANTIOQUIA es el departamento que posee un mayor registro de recambios, por lo cuál se puede apreciar un comportamiento acorde en este gráfico con lo detallado anteriormente. Sin embargo, en este caso se puede notar que el fallo más temprano es con relación a los cargadores portables, que en promedio se cambian por debajo de los 10.000 kilómetros. Esto indica que si una unidad cargadora portátil va a fallar, probablemente lo hará en los primeros 10.000 kilómetros de uso. Esta situación también es plausible en CUNDINAMARCA.
 
-- De igual forma, se consignó además que en ANTIOQUIA la falla con recambio más común se presenta a causa de los bujes de amortiguador. En este caso se puede notar que esta falla generalmente se produce entre los 30.000 y los 45.000 kilómetros. Este promedio es significativamente mayor al de los demás departamentos puesto que dicha falla en CUNDINAMARCA sucede principalmente entre los 10.000 y los 20.000 kilómetros. Una causa razonable para esta situación podría ser el estado de las vías. 
+- De igual forma, se consignó además que en ANTIOQUIA la falla con recambio más común se presenta a causa de los bujes de amortiguador. En este caso se puede notar que esta falla generalmente se produce entre los 30.000 y los 45.000 kilómetros. Este promedio es significativamente mayor al de los demás departamentos puesto que dicha falla en CUNDINAMARCA sucede principalmente entre los 10.000 y los 20.000 kilómetros. Una causa razonable para esta situación podría ser el estado de las vías en la ciudad de Bogotá. 
 
 - Otro contraste significativo en este gráfico puede verse en relación al sensor de presión, donde en ANTIOQUIA suele durar un poco más antes de necesitar ser cambiado respecto al departamento de CUNDINAMARCA, donde generalmente falla antes de los 15.000 kilómetros. 
 
@@ -201,7 +207,7 @@ ggplotly(p5)
 
 - Algo similar sucede en BIMBO, donde el recambio más temprano que es usualmente solicitado es el VCU software, donde la mayor cantidad de cambios en este componente se han realizado por debajo de los 5.000 kilómetros. Esto en contraste con empresas como ARGOS, puesto que en esta última, los cambios de esta unidad se han requerido por encima de los 35.000 kilómetros. Esta información en relación a BIMBO también difiere estadísticamente de las empresas ÉXITO y OPERLOG, puesto que ambas solicitan este repuesto después de los 5.000 kilómetros y en promedio cerca de los 10.000.
 
-- En lo que respecta a las baterías 12v, se puede apreciar una diferencia significativa entre ARGOS y BIMBO, donde en esta última suelen fallar primero que en ARGOS (Antes de los 20.000 kilómetros usualmente).
+- En lo que respecta a las baterías 12v, se puede apreciar una diferencia significativa entre ARGOS y BIMBO, donde en esta última suelen fallar primero que en ARGOS (antes de los 20.000 kilómetros usualmente).
 
 - Finalmente, respecto a la terminal inteligente del vehículo, se puede ver que en ARGOS, este componente requiere ser cambiado en promedio a los 24.000 kilómetros, sin embargo en este punto la información varía mucho. En contraparte, la empresa BIMBO solicita este repuesto en alrededor de los 5.000 kilómetros, existiendo entre estas dos empresas una diferencia significativa de cara al reemplazo de este componente.
 
@@ -213,16 +219,21 @@ distkm$mu.coefficients
 #rgamma(10000, 1, scale = 15156.8)
 ```
 
-Finalmente, para un análisis estadístico más técnico es de mucho interés conocer el comportamiento en la curva de distribución de la respuesta (en este caso kilometraje). Así entonces, haciendo uso de diversos test de bondad de ajuste y con la ayuda de diferentes algoritmos se logra concretar que la distribución que mejor se ajusta al kilometraje que registran los camiones al entrar a un taller es la curva de una distribución exponencial. A continuación se ilustra la curva real de la densidad de la respuesta versus la curva que mejor se le ajusta $KILOMETRAJE \sim EXP(15156.8)$
+### Ajuste distribucional a la respuesta
+
+Finalmente, para un análisis estadístico más técnico es de mucho interés conocer el comportamiento en la curva de distribución de la respuesta (en este caso kilometraje). Así entonces, haciendo uso de diversos test de bondad de ajuste y con la ayuda de diferentes algoritmos se logra concretar que la distribución que mejor se ajusta al kilometraje que registran los camiones al entrar a un taller es la curva de una distribución exponencial. A continuación se ilustra la curva real de la densidad de la respuesta versus la curva que mejor se le ajusta 
+
+$$KILOMETRAJE \sim EXP(15156.8)$$
 ```{r out.height=500, out.width=900}
 densityframe <- data.frame(Kilometraje = c(data$KILOMETRAJE,rEXP(10000,15156.8)),
                            Tipo = c(rep("Real",length(data$KILOMETRAJE)),
                                      rep("Ajustado",10000)))
 
-ggplot(densityframe, aes(x=Kilometraje, color=Tipo)) +
+ggplotly(ggplot(densityframe, aes(x=Kilometraje, color=Tipo)) +
   geom_density(lwd=1) +
-  xlim(-3000,100000) + 
-  labs(y="Densidad", title = "Modelo distribucional para el Kilometraje")
+  xlim(-3000,80000) + 
+  ylim(1e-33,5.5e-5) +
+  labs(y="Densidad", title = "Modelo distribucional para el Kilometraje"))
 
 ```
 
