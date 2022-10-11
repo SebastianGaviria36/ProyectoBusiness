@@ -5,7 +5,7 @@ datosModelo2 <- read_excel("datosModelo2.xlsx") %>% as.data.frame()
 
 for (i in 1:2033){
   
-  partes <- unique(datosModelo2$DESCRIPCION_PARTE)
+  partes <- sort(unique(datosModelo2$DESCRIPCION_PARTE))
   
   if(datosModelo2$ESTADO[i] == "CAMBIO" & 
      is.na(datosModelo2$DESCRIPCION_PARTE[i])){
