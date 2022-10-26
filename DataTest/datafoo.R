@@ -116,9 +116,6 @@ datafoo <- function(datasap,datamod){
     }
   }
   names(sap) <- toupper(names(sap))
-  View(sap)
-  View(rbind(mod,sap))
-
   #TALLER TREATMENT----------------------------------------
   tall_link <- function(){
     #tall_bar <- read_excel("DataTest/Control Taller - Barranquilla.xlsx")
@@ -251,21 +248,124 @@ datafoo <- function(datasap,datamod){
            departamento_propietario = departamento_propietario,
            renting = renting,
            dias = dias)
+  
+  tall$taller[tall$taller=="Auteco Bogotá"] <- "AUTECO MOBILITY TALLER BOGOTA AM"
+  tall$taller[tall$taller=="Auteco Bucaramanga"] <- "AUTECO MOBILITY TALLER BUCARAMANGA AM"
+  tall$taller[tall$taller=="Auteco Cali"] <- "AUTECO MOBILITY TALLER CALI AM"
+  tall$taller[tall$taller=="Auteco Medellín"] <- "AUTECO MOBILITY TALLER VEGA AM"
+  tall$taller[tall$taller=="Surtiretenes BGTA"] <- "SURTIRETENES Y RODAMIENTOS LTDA"
+  tall$taller[tall$taller=="Asediesel"] <- "ASEDIESEL SAS"
+  tall$taller[tall$taller=="ETM"] <- "EQUIPOS TECNI METALICOS SAS"
+  tall$taller[tall$taller=="KAEL ingenieros"] <- "KAEL INGENIEROS SAS"
+  
+  talleres <- sort(unique(mod$TALLER))
+  fallas <- sort(unique(mod$DESCRIPCION_PARTE))
+  empresas <- sort(unique(mod$EMPRESA))
+  servicios <- sort(unique(mod$DESCRIPCION_SERVICIO))
+  estados <- sort(unique(mod$ESTADO))
+  
   for (i in 1:n){
-    matched <- match(tall$placa[i],datosModelo2$PLACA)
-    tall$chasis[i] <- datosModelo2$CHASIS[matched]
-    tall$motor[i] <- datosModelo2$MOTOR[matched]
-    tall$fecha_alistamiento[i] <- as.character(datosModelo2$FECHA_ALISTAMIENTO[matched])
-    tall$fecha_aom[i] <- as.character(datosModelo2$FECHA_AOM[matched])
-    tall$version[i] <- datosModelo2$VERSION[matched]
-    tall$departamento[i] <- datosModelo2$DEPARTAMENTO[matched]
-    tall$modelo_año[i] <- datosModelo2$MODELO_AÑO[matched]
-    tall$ciudad_propietario[i] <- datosModelo2$CIUDAD_PROPIETARIO[matched]
-    tall$departamento_propietario[i] <- datosModelo2$DEPARTAMENTO_PROPIETARIO[matched]
+    matched <- match(tall$placa[i],mod$PLACA)
+    tall$chasis[i] <- mod$CHASIS[matched]
+    tall$motor[i] <- mod$MOTOR[matched]
+    tall$fecha_alistamiento[i] <- as.character(mod$FECHA_ALISTAMIENTO[matched])
+    tall$fecha_aom[i] <- as.character(mod$FECHA_AOM[matched])
+    tall$version[i] <- mod$VERSION[matched]
+    tall$departamento[i] <- mod$DEPARTAMENTO[matched]
+    tall$modelo_año[i] <- mod$MODELO_AÑO[matched]
+    tall$ciudad_propietario[i] <- mod$CIUDAD_PROPIETARIO[matched]
+    tall$departamento_propietario[i] <- mod$DEPARTAMENTO_PROPIETARIO[matched]
     tall$dias[i] <- interval(ymd(tall$fecha_aom[i]),
                              ymd(tall$fecha_ingreso[i])) %/% days(1)
+    
+    tallertall <- tall[i,10]
+    
+    if (tallertall %in% talleres){}
+    
+    else{
+      print(data.frame(Taller=talleres))
+      print(data.frame(TALLERTALL=tallertall))
+      tallerindex <- readline("Reemplazar por: ")
+      tallerindex <- ifelse(tallerindex=="",NA,tallerindex)
+      
+      if (is.na(as.integer(tallerindex))){
+        talleres <- unique(append(talleres, tallerindex))
+        tall[i,10] <- tallerindex
+      }
+      
+      else{
+        tall[i,10] <- talleres[as.integer(tallerindex)]
+      }
+    }
+    
+    print(data.frame(Fallas = fallas))
+    print(tall$estado[i])
+    descpartindex <- readline("La falla se relaciona con: ")
+    descpartindex <- ifelse(descpartindex=="",NA,descpartindex)
+    
+    if (is.na(as.integer(descpartindex))){
+      fallas <- unique(append(fallas, descpartindex))
+      tall[i,12] <- descpartindex
+    }
+    
+    else{
+      tall[i,12] <- fallas[as.integer(descpartindex)]
+    }
+    
+    empresa <- strsplit(tall$empresa[i], " - ")[[1]]
+    if (length(empresa) == 2) {tall$empresa[i] <- empresa[2]}
+    
+    else {tall$empresa[i] <- empresa}
+    
+    if (tall$empresa[i] %in% empresas){}
+    
+    else{
+      print(data.frame(EMPRESA = empresas))
+      print(tall$empresa[i])
+      empresaindex <- readline("Reemplazar por: ")
+      empresaindex <- ifelse(empresaindex=="",NA,empresaindex)
+      
+      if (is.na(as.integer(empresaindex))){
+        empresas <- unique(append(empresas, empresaindex))
+        tall[i,16] <- empresaindex
+      }
+      
+      else{
+        tall[i,16] <- empresas[as.integer(empresaindex)]
+      }
+    }
+    
+    print(data.frame(SERVICIO = servicios))
+    print(tall$descripcion_servicio[i])
+    servicioindex <- readline("Reemplazar por: ")
+    servicioindex <- ifelse(servicioindex=="",NA,servicioindex)
+    
+    if (is.na(as.integer(servicioindex))){
+      servicios <- unique(append(servicios, servicioindex))
+      tall$descripcion_servicio[i] <- servicioindex
+    }
+    
+    else{
+      tall$descripcion_servicio[i] <- servicios[as.integer(servicioindex)]
+    }
+    
+    print(data.frame(ESTADO = estados))
+    print(tall$estado[i])
+    estadoindex <- readline("Reemplazar por: ")
+    estadoindex <- ifelse(estadoindex=="",NA,estadoindex)
+    
+    if (is.na(as.integer(estadoindex))){
+      tall$estado[i] <- estadoindex
+    }
+    
+    else{
+      tall$estado[i] <- estados[as.integer(estadoindex)]
+    }
   }
-View(tall)
+  names(tall) <- toupper(names(tall))
+  View(sap)
+  View(tall)
+  View(rbind(mod,sap,tall))  
 }
 
 datafoo(datasap = "DataTest/rep4w.XLSX", 
