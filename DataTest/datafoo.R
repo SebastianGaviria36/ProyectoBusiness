@@ -365,8 +365,9 @@ datafoo <- function(datasap,datamod){
   names(tall) <- toupper(names(tall))
   View(sap)
   View(tall)
-  View(rbind(mod,sap,tall))  
+  modfinal <- rbind(mod,sap,tall)
+  write.xlsx(modfinal, "datosModelo2.xlsx")
 }
 
-datafoo(datasap = "DataTest/rep4w.XLSX", 
+datafoo(datasap = "DataTest/rep 4w.XLSX", 
         datamod = "DataTest/datosModelo2.xlsx")
