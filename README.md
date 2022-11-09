@@ -1,7 +1,8 @@
 # Proyecto Analítica Auteco Business
+## Rama Model
 
-En este repositorio podrás encontrar toda la información relacionada al proyecto de analítica predictiva sobre los mantenimientos de los vehículos 4w+ del portafolio de Auteco Business.
+Acá podrás encontrar todos los avances del proceso de modelación de los datos y los recursos utilizados para este fin. El código escrito para el planteamiento y desarrollo de los modelos predictivos lo podrás encontrar en el archivo "MODEL.R".
 
 <p align="center">
-  <img width="600" height="450" src="https://cdn.dribbble.com/users/216637/screenshots/3264087/truck1.gif">
+  <img width="600" height="400" src="https://gbhat.com/assets/gifs/polynomial_regression_2.gif">
 </p>
