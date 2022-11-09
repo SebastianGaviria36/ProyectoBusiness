@@ -2,7 +2,9 @@
 library(readxl)
 library(tidyverse)
 library(gamlss)
-#-------------------LOADING DATA--------------------------
+library(survival)
+library(plotly)
+#-------------------LOADING DATA---------------------------
 data <- read_excel("datosModelo2.xlsx", 
                     col_types = c("text", "text", "text", 
                                   "text", "text", "numeric", "date", 
@@ -64,6 +66,63 @@ for (i in 1:nrow(data)){
     data$KMRAN[i] <- "70001-75000"
   }
 }
+#------------------AUX FUNCTIONS---------------------------
+rmse <- function(real,pred){
+  sqrt(mean((real-pred)^2))
+}
 #------------------MODELLING-------------------------------
-data$KILOMETRAJE[data$DESCRIPCION_SERVICIO=="CORRECTIVO"] %>%
-  na.omit() %>% density() %>% plot()
+
+##-----------------EXPONENTIAL SURVIVAL MODEL--------------
+censind <- ifelse(is.na(data$DESCRIPCION_PARTE),0,1)
+
+for (i in 1:nrow(data)){
+  if (!is.na(data$KILOMETRAJE[i]) & data$KILOMETRAJE[i]==0){
+    data$KILOMETRAJE[i]<-1
+  }
+}
+
+mod1 <- survreg(Surv(KILOMETRAJE,censind) ~ DESCRIPCION_PARTE +
+                  EMPRESA + DEPARTAMENTO, data = data, dist = "exponential")
+
+topredmod1 <- data %>% dplyr::select(KILOMETRAJE,
+                       DESCRIPCION_PARTE, 
+                       EMPRESA, 
+                       DEPARTAMENTO) %>% 
+  na.omit()
+
+predictedmod1 <- predict(mod1, newdata = topredmod1)
+rmse(topredmod1$KILOMETRAJE, predictedmod1) 
+
+pmod1 <- data.frame(KILOMETRAJE = c(topredmod1$KILOMETRAJE,
+                                    predictedmod1),
+                    VALOR = c(rep("Real",866),rep("Predicho",866)),
+                    X = rep(1:866,2)) %>%
+  ggplot(aes(X,KILOMETRAJE, group = VALOR, color = VALOR)) +
+  geom_line() +
+  labs(title = "Ajuste Modelo Exponencial", y = "Kilometraje",
+       x = "", color = "Valor") +
+  theme(axis.text.x = element_blank())
+ggplotly(pmod1)
+##-----------------LINEAR MODEL----------------------------
+mod2 <- lm(KILOMETRAJE ~ DESCRIPCION_PARTE +
+             EMPRESA + DEPARTAMENTO, data = data)
+
+topredmod2 <- data %>% dplyr::select(KILOMETRAJE,
+                                     DESCRIPCION_PARTE, 
+                                     EMPRESA, 
+                                     DEPARTAMENTO) %>% 
+  na.omit()
+
+predictedmod2 <- predict(mod2, newdata = topredmod2)
+rmse(topredmod2$KILOMETRAJE, predictedmod2) 
+
+pmod2 <- data.frame(KILOMETRAJE = c(topredmod2$KILOMETRAJE,
+                                    predictedmod2),
+                    VALOR = c(rep("Real",866),rep("Predicho",866)),
+                    X = rep(1:866,2)) %>%
+  ggplot(aes(X,KILOMETRAJE, group = VALOR, color = VALOR)) +
+  geom_line() +
+  labs(title = "Ajuste Modelo Lineal", y = "Kilometraje",
+       x = "", color = "Valor") +
+  theme(axis.text.x = element_blank())
+ggplotly(pmod2)
