@@ -70,6 +70,22 @@ for (i in 1:nrow(data)){
 rmse <- function(real,pred){
   sqrt(mean((real-pred)^2))
 }
+resultsframe <- function(Modelname, rmse, aic){
+  newob <- data.frame(Modelo = Modelname, RMSE = rmse, AIC = aic)
+  rbind(modelsperform, newob)
+}
+
+#------------------GRAPHIC TEMPLATE------------------------
+pmod1 <- data.frame(KILOMETRAJE = c(topred1$KILOMETRAJE,
+                                    predictedmod1),
+                    VALOR = c(rep("Real",866),rep("Predicho",866)),
+                    X = rep(1:866,2)) %>%
+  ggplot(aes(X,KILOMETRAJE, group = VALOR, color = VALOR)) +
+  geom_line() +
+  labs(title = "Ajuste Modelo Exponencial", y = "Kilometraje",
+       x = "", color = "Valor") +
+  theme(axis.text.x = element_blank())
+ggplotly(pmod1)
 #------------------MODELLING-------------------------------
 
 ##-----------------EXPONENTIAL SURVIVAL MODEL--------------
@@ -84,45 +100,68 @@ for (i in 1:nrow(data)){
 mod1 <- survreg(Surv(KILOMETRAJE,censind) ~ DESCRIPCION_PARTE +
                   EMPRESA + DEPARTAMENTO, data = data, dist = "exponential")
 
-topredmod1 <- data %>% dplyr::select(KILOMETRAJE,
+topred1 <- data %>% dplyr::select(KILOMETRAJE,
                        DESCRIPCION_PARTE, 
                        EMPRESA, 
-                       DEPARTAMENTO) %>% 
-  na.omit()
+                       DEPARTAMENTO) %>% na.omit() #datos para predecir
+                                                   #sobre estos regresores
 
-predictedmod1 <- predict(mod1, newdata = topredmod1)
-rmse(topredmod1$KILOMETRAJE, predictedmod1) 
+predictedmod1 <- predict(mod1, newdata = topred1)
+modelsperform <- data.frame(Modelo = "Surv Exponential",
+                            RMSE = rmse(topred1$KILOMETRAJE, predictedmod1),
+                            AIC = AIC(mod1))
 
-pmod1 <- data.frame(KILOMETRAJE = c(topredmod1$KILOMETRAJE,
-                                    predictedmod1),
-                    VALOR = c(rep("Real",866),rep("Predicho",866)),
-                    X = rep(1:866,2)) %>%
-  ggplot(aes(X,KILOMETRAJE, group = VALOR, color = VALOR)) +
-  geom_line() +
-  labs(title = "Ajuste Modelo Exponencial", y = "Kilometraje",
-       x = "", color = "Valor") +
-  theme(axis.text.x = element_blank())
-ggplotly(pmod1)
+##-----------------WEIBULL SURVIVAL MODEL------------------
+mod2 <- survreg(Surv(KILOMETRAJE,censind) ~ DESCRIPCION_PARTE +
+                  EMPRESA + DEPARTAMENTO, data = data, dist = "weibull")
+
+predictedmod2 <- predict(mod2, newdata = topred1)
+modelsperform <- resultsframe("Surv Weibull", 
+                              rmse(topred1$KILOMETRAJE, predictedmod2),
+                              AIC(mod2))
+
+##-----------------GAUSSIAN SURVIVAL MODEL-----------------
+mod3 <- survreg(Surv(KILOMETRAJE,censind) ~ DESCRIPCION_PARTE +
+                  EMPRESA + DEPARTAMENTO, data = data, dist = "gaussian")
+
+predictedmod3 <- predict(mod3, newdata = topred1)
+modelsperform <- resultsframe("Surv Gaussian", 
+                              rmse(topred1$KILOMETRAJE, predictedmod3),
+                              AIC(mod3))
+
+##-----------------LOGISTIC SURVIVAL MODEL-----------------
+mod4 <- survreg(Surv(KILOMETRAJE,censind) ~ DESCRIPCION_PARTE +
+                  EMPRESA + DEPARTAMENTO, data = data, dist = "logistic")
+
+predictedmod4 <- predict(mod4, newdata = topred1)
+modelsperform <- resultsframe("Surv Logistic", 
+                              rmse(topred1$KILOMETRAJE, predictedmod4),
+                              AIC(mod4))
+
+##-----------------LOGNORMAL SURVIVAL MODEL----------------
+mod5 <- survreg(Surv(KILOMETRAJE,censind) ~ DESCRIPCION_PARTE +
+                  EMPRESA + DEPARTAMENTO, data = data, dist = "lognormal")
+
+predictedmod5 <- predict(mod5, newdata = topred1)
+modelsperform <- resultsframe("Surv Lognormal", 
+                              rmse(topred1$KILOMETRAJE, predictedmod5),
+                              AIC(mod5))
+
+##-----------------LOGLOGISTIC SURVIVAL MODEL--------------
+mod6 <- survreg(Surv(KILOMETRAJE,censind) ~ DESCRIPCION_PARTE +
+                  EMPRESA + DEPARTAMENTO, data = data, dist = "loglogistic")
+
+predictedmod6 <- predict(mod6, newdata = topred1)
+modelsperform <- resultsframe("Surv Loglogistic", 
+                              rmse(topred1$KILOMETRAJE, predictedmod6),
+                              AIC(mod6))
+
 ##-----------------LINEAR MODEL----------------------------
-mod2 <- lm(KILOMETRAJE ~ DESCRIPCION_PARTE +
+mod7 <- lm(KILOMETRAJE ~ DESCRIPCION_PARTE +
              EMPRESA + DEPARTAMENTO, data = data)
 
-topredmod2 <- data %>% dplyr::select(KILOMETRAJE,
-                                     DESCRIPCION_PARTE, 
-                                     EMPRESA, 
-                                     DEPARTAMENTO) %>% 
-  na.omit()
-
-predictedmod2 <- predict(mod2, newdata = topredmod2)
-rmse(topredmod2$KILOMETRAJE, predictedmod2) 
-
-pmod2 <- data.frame(KILOMETRAJE = c(topredmod2$KILOMETRAJE,
-                                    predictedmod2),
-                    VALOR = c(rep("Real",866),rep("Predicho",866)),
-                    X = rep(1:866,2)) %>%
-  ggplot(aes(X,KILOMETRAJE, group = VALOR, color = VALOR)) +
-  geom_line() +
-  labs(title = "Ajuste Modelo Lineal", y = "Kilometraje",
-       x = "", color = "Valor") +
-  theme(axis.text.x = element_blank())
-ggplotly(pmod2)
+predictedmod7 <- predict(mod7, newdata = topred1)
+modelsperform <- resultsframe("RLM", 
+                              rmse(topred1$KILOMETRAJE, predictedmod7),
+                              AIC(mod7))
+##-----------------GLM POISSON MODEL-----------------------
