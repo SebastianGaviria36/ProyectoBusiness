@@ -158,7 +158,7 @@ modelsperform <- resultsframe("Surv Loglogistic",
                               AIC(mod6))
 
 ##-----------------LINEAR MODEL----------------------------
-mod7 <- lm(KILOMETRAJE ~ DESCRIPCION_PARTE +
+mod7 <- lm(KILOMETRAJE ~
              EMPRESA + DEPARTAMENTO, data = data)
 
 predictedmod7 <- predict(mod7, newdata = topred1)
@@ -193,3 +193,11 @@ predictedmod10 <- predict(mod10, newdata = topred1)
 modelsperform <- resultsframe("GLM QUASIPOIS", 
                               rmse(topred1$KILOMETRAJE, predictedmod10),
                               AIC(mod10))
+##-----------------GAMLSS BCT MODEL------------------------
+mod11 <- gamlss(KILOMETRAJE ~ DESCRIPCION_PARTE +
+                EMPRESA + DEPARTAMENTO, family = BCT(), data = topred1,
+                control = gamlss.control(n.cyc = 260))
+predictedmod11 <- predict(mod11, newdata = topred1)
+modelsperform <- resultsframe("GAMLSS BCT", 
+                              rmse(topred1$KILOMETRAJE, predictedmod11),
+                              AIC(mod11))
