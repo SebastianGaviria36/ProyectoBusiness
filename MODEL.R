@@ -66,6 +66,7 @@ for (i in 1:nrow(data)){
     data$KMRAN[i] <- "70001-75000"
   }
 }
+
 #------------------AUX FUNCTIONS---------------------------
 rmse <- function(real,pred){
   sqrt(mean((real-pred)^2))
@@ -165,3 +166,30 @@ modelsperform <- resultsframe("RLM",
                               rmse(topred1$KILOMETRAJE, predictedmod7),
                               AIC(mod7))
 ##-----------------GLM POISSON MODEL-----------------------
+mod8 <- data %>% mutate(KILOMETRAJE = round(KILOMETRAJE)) %>%
+glm(KILOMETRAJE ~ DESCRIPCION_PARTE +
+             EMPRESA + DEPARTAMENTO, data = ., family = poisson())
+
+predictedmod8 <- predict(mod8, newdata = topred1)
+
+modelsperform <- resultsframe("GLM POIS", 
+                              rmse(topred1$KILOMETRAJE, predictedmod8),
+                              AIC(mod8))
+##-----------------GLM GAMMA MODEL-------------------------
+mod9 <- glm(KILOMETRAJE ~ DESCRIPCION_PARTE +
+        EMPRESA + DEPARTAMENTO, data = data, family = Gamma())
+
+predictedmod9 <- predict(mod9, newdata = topred1)
+
+modelsperform <- resultsframe("GLM GAMMA", 
+                              rmse(topred1$KILOMETRAJE, predictedmod9),
+                              AIC(mod9))
+##-----------------GLM QUASI MODEL-------------------------
+mod10 <- glm(KILOMETRAJE ~ DESCRIPCION_PARTE +
+              EMPRESA + DEPARTAMENTO, data = data, family = quasipoisson())
+
+predictedmod10 <- predict(mod10, newdata = topred1)
+
+modelsperform <- resultsframe("GLM QUASIPOIS", 
+                              rmse(topred1$KILOMETRAJE, predictedmod10),
+                              AIC(mod10))
