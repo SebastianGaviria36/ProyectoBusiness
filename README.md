@@ -10,12 +10,12 @@ Las ramas de trabajo las podrás encontrar haciendo clic sobre el ícono ubicado
 ![alt text](https://github.com/PracticanteAutecoBusiness/ProyectoBusiness/blob/main/mainpng.jpg)\
 Y las mismas se resumen así:
 
-- **main:** Rama principal del proyecto. Contiene los recursos generales para el desarrollo del mismo; bases de datos relacionadas y demás elementos cruciales se encuentran en este punto.
+- **[main](https://github.com/PracticanteAutecoBusiness/ProyectoBusiness/tree/main):** Rama principal del proyecto. Contiene los recursos generales para el desarrollo del mismo; bases de datos relacionadas y demás elementos cruciales se encuentran en este punto.
 
-- **Model:** Acá podrás encontrar todos los avances del proceso de modelación de los datos y los recursos utilizados para este fin. El código escrito para el planteamiento y desarrollo de los modelos predictivos lo podrás encontrar en el archivo "MODEL.R".
+- **[Model](https://github.com/PracticanteAutecoBusiness/ProyectoBusiness/tree/Model):** Acá podrás encontrar todos los avances del proceso de modelación de los datos y los recursos utilizados para este fin. El código escrito para el planteamiento y desarrollo de los modelos predictivos lo podrás encontrar en el archivo "MODEL.R".
 
-- **Datafoo:** En esta rama se encontrará todo lo relacionado al desarrollo de la función que automatiza parcialmente la adición de nuevas observaciones a la base de datos principal del proyecto para el modelamiento. La función principal se encuentra en la carpeta "DataTest" con el archivo "datafoo.R".
+- **[Datafoo](https://github.com/PracticanteAutecoBusiness/ProyectoBusiness/tree/Datafoo):** En esta rama se encontrará todo lo relacionado al desarrollo de la función que automatiza parcialmente la adición de nuevas observaciones a la base de datos principal del proyecto para el modelamiento. La función principal se encuentra en la carpeta "DataTest" con el archivo "datafoo.R".
 
-- **Edaed:** En este apartado del repositorio te encontrarás con la realización del análisis descriptivo y exploratorio de los datos principales en relación al proyecto. Archivos como "EDAED.Rmd" consignan la programación para los gráficos dinámicos y su publicación en el portal Rpubs para el acceso de los interesados: [Rpubs](https://rpubs.com/SebastianGaviria/946547)
+- **[Edaed](https://github.com/PracticanteAutecoBusiness/ProyectoBusiness/tree/EDAED):** En este apartado del repositorio te encontrarás con la realización del análisis descriptivo y exploratorio de los datos principales en relación al proyecto. Archivos como "EDAED.Rmd" consignan la programación para los gráficos dinámicos y su publicación en el portal Rpubs para el acceso de los interesados: [Rpubs](https://rpubs.com/SebastianGaviria/946547)
 
 
