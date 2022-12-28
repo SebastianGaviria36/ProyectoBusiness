@@ -6,9 +6,7 @@ Bienvenido al repositorio donde podrás encontrar toda la información relaciona
   <img width="420" height="315" src="https://cdn.dribbble.com/users/216637/screenshots/3264087/truck1.gif">
 </p>
 
-Las ramas de trabajo las podrás encontrar haciendo clic sobre el ícono ubicado arriba\
-![alt text](https://github.com/PracticanteAutecoBusiness/ProyectoBusiness/blob/main/mainpng.jpg)\
-Y las mismas se resumen así:
+Las ramas de trabajo se resumen así:
 
 - **[main](https://github.com/PracticanteAutecoBusiness/ProyectoBusiness/tree/main):** Rama principal del proyecto. Contiene los recursos generales para el desarrollo del mismo; bases de datos relacionadas y demás elementos cruciales se encuentran en este punto.
 
