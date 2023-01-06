@@ -201,3 +201,48 @@ predictedmod11 <- predict(mod11, newdata = topred1)
 modelsperform <- resultsframe("GAMLSS BCT", 
                               rmse(topred1$KILOMETRAJE, predictedmod11),
                               AIC(mod11))
+
+#Todos los modelos planteados hasta este punto siguen la estructura:
+#KILOMETRAJE ~ PREDICTORES, lo cual es acertado si se busca conocer el
+#kilometraje de falla usual de los vehículos bajo ciertas condiciones. Sin
+#embargo, este paradigma supone un inconveniente de cara al entrenamiento de 
+#los modelos: Como se supo en el análisis descriptivo de los datos, es
+#fundamental involucrar la variable DESCRIPCION_PARTE en la estructura de los
+#objetos matemáticos y dada su gran dimensionalidad, incluirla como regresor
+#genera singularidades y deficiencias estadísticas que reducen drásticamente 
+#el desempeño predictivo (Véase el problema de rangos deficientes y 
+#saturación del modelo).
+
+#En retrospectiva, este modelo busca ser ensamblado con otro mismo que dado el
+#kilometraje predicho, pueda predecir a su vez la probabilidad de falla en cada
+#concepto. Esta práctica se conoce como ensamble de modelos y en este caso
+#aunque es plausible, dados los inconvenientes encontrados, se debe atacar el 
+#problema desde otro frente.
+
+#Por este motivo, se prosigue el proceso de modelación desde el paradigma de la
+#clasificación, donde la estructura del modelo tentativa puede ser
+#P(DESCRIPCION_PARTE) ~ CLASIFICADORES + KILOMETRAJE/RANGO_KILOMETRAJE.
+
+data$DESCRIPCION_PARTE[is.na(data$DESCRIPCION_PARTE)] <- "SIN FALLO"
+library(nnet)
+##----------------MULTINOMIAL LOGISTIC MODEL---------------
+modclas1 <- multinom(DESCRIPCION_PARTE ~  EMPRESA + DEPARTAMENTO + KMRAN,
+                     MaxNWts = 12000,
+                     data = data %>% filter(ESTADO == "CAMBIO"), #¿filtrar?
+                     maxit = 10000)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
