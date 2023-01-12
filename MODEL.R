@@ -230,19 +230,3 @@ modclas1 <- multinom(DESCRIPCION_PARTE ~  EMPRESA + DEPARTAMENTO + KMRAN,
                      MaxNWts = 12000,
                      data = data %>% filter(ESTADO == "CAMBIO"), #¿filtrar?
                      maxit = 10000)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
