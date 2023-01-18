@@ -75,6 +75,53 @@ resultsframe <- function(Modelname, rmse, aic){
   newob <- data.frame(Modelo = Modelname, RMSE = rmse, AIC = aic)
   rbind(modelsperform, newob)
 }
+kmclass <- function(km){
+  if (km >= 0 & km <= 5000){
+    return("0-5000")
+  }
+  if (km >= 5001 & km <= 10000){
+    return("5001-10000")
+  }
+  if (km >= 10001 & km <= 15000){
+    return("10001-15000")
+  }
+  if (km >= 15001 & km <= 20000){
+    return("15001-20000")
+  }
+  if (km >= 20001 & km <= 25000){
+    return("20001-25000")
+  }
+  if (km >= 25001 & km <= 30000){
+    return("25001-30000")
+  }
+  if (km >= 30001 & km <= 35000){
+    return("30001-35000")
+  }
+  if (km >= 35001 & km <= 40000){
+    return("35001-40000")
+  }
+  if (km >= 40001 & km <= 45000){
+    return("40001-45000")
+  }
+  if (km >= 45001 & km <= 50000){
+    return("45001-50000")
+  }
+  if (km >= 50001 & km <= 55000){
+    return("50001-55000")
+  }
+  if (km >= 55001 & km <= 60000){
+    return("55001-60000")
+  }
+  if (km >= 60001 & km <= 65000){
+    return("60001-65000")
+  }
+  if (km >= 65001 & km <= 70000){
+    return("65001-70000")
+  }
+  if (km >= 70001 & km <= 75000){
+    return("70001-75000")
+  }
+}
 
 #------------------GRAPHIC TEMPLATE------------------------
 pmod1 <- data.frame(KILOMETRAJE = c(topred1$KILOMETRAJE,
@@ -228,5 +275,17 @@ library(nnet)
 ##----------------MULTINOMIAL LOGISTIC MODEL---------------
 modclas1 <- multinom(DESCRIPCION_PARTE ~  EMPRESA + DEPARTAMENTO + KMRAN,
                      MaxNWts = 12000,
-                     data = data %>% filter(ESTADO == "CAMBIO"), #¿filtrar?
+                     data = data, #¿filtrar?
                      maxit = 10000)
+
+predictmultinom <- function(EMPRESA, DEPARTAMENTO, KILOMETRAJE){
+  predictions <- predict(modclas1, newdata = data.frame(EMPRESA = EMPRESA,
+                                             DEPARTAMENTO = DEPARTAMENTO,
+                                             KMRAN = kmclass(KILOMETRAJE)),
+                         type = "prob") %>%
+    sort(decreasing = T) %>% head(5)
+  
+  return(predictions)
+}
+predictmultinom("ARGOS TEMPO", "ANTIOQUIA", 15000)
+predictmultinom("ARGOS TEMPO", "CUNDINAMARCA", 15000)
